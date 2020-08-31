@@ -9,17 +9,43 @@ os.system('cls' if os.name == 'nt' else 'clear')
 GREEN = "\033[1;32m"
 sys.stdout.write(GREEN)
 
+def nameLookup(mac):
+    names = {
+    '42:bf:71:29:4d:a4': 'X-A41VALMER',
+    'c6:ed:0e:97:75:25': 'X-ALEXS9',
+    '44:8a:5b:ca:73:33': 'X-MYDESKMM',
+    'c0:ee:fb:f5:d8:20': 'X-OnePLUS',
+    'f8:87:f1:c2:d5:a6': 'X-A_iPhone',
+    '3c:f0:11:05:08:1b': 'X-A_LapWrk',
+    '24:77:03:26:61:38': 'X-PWR_KUHN',
+    '5c:ea:1d:0b:9e:8f': 'X-SONY SIT',
+    '50:ec:50:1b:fa:13': 'X-FELIX',
+    '04:f0:21:64:02:00': 'X-HIK_ATT',
+    '00:17:10:90:df:a8': 'X-VM_BLA1',
+    'e8:b1:fc:3a:b8:b7': 'X-TPX_LAP'
+    }
+
+    if mac in names:
+        return names[mac]
+    else:
+        return "NO NAME"
+
 def data_analys(output):
-    vendor=''
     print('--- %d clients detected' % (len(output.splitlines())))
     for line in output.splitlines():
         mac = line.split(' ')[1]
+        vendor = 'VENDOR NOT FOUND'
         try:
             vendor = MacLookup().lookup(mac)
         except:
-            print('Could not parse MAC %s' % (mac))
-        hostname = line.split(' ')[3]
-        print('CLIENT: %s [%s]' % (vendor, hostname))
+            pass
+            #print('Could not parse MAC %s' % (mac))
+        name = nameLookup(mac)
+        if name != 'NO NAME':
+            hostname = name
+        else:
+            hostname = '!!!-'+line.split(' ')[3]
+        print('CLIENT: %s [%s]' % (hostname, vendor))
 
 def connect(username, password, type, ipaddress, port):
     params = {
